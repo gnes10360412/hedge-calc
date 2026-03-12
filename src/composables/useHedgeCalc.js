@@ -77,9 +77,13 @@ export function useHedgeCalc() {
     const adj = p.adjustments
     const dailySLReduceAmt = adj.dailySLReduce * contractValueIn
 
-    // 5. TP Amount
-    let tpAmt = consistency > 0 ? profitTarget / consistency : profitTarget
-    if (p.maxSingleProfit > 0 && tpAmt > p.maxSingleProfit) tpAmt = p.maxSingleProfit
+    // 5. TP Amount (subtract dailyPL per spreadsheet formula: E21-B7)
+    let tpAmt = (consistency > 0 ? profitTarget / consistency : profitTarget) - dpl
+    if (p.maxSingleProfit > 0) {
+      const profitExtraAmt = adj.profitTargetExtra * contractValueIn
+      const singleProfitCap = p.maxSingleProfit - profitExtraAmt - dpl
+      if (singleProfitCap > 0 && singleProfitCap < tpAmt) tpAmt = singleProfitCap
+    }
 
     // 6. SL Amount (3 constraints)
     const constraint1 = singleLossAmt
