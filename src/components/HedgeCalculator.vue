@@ -69,59 +69,66 @@
     <div class="card" v-if="result">
       <h2>計算結果</h2>
 
-      <ResultSection
-        title="場內"
-        lotLabel="場內手數"
-        tpLabel="場內止盈"
-        slLabel="場內止損"
-        :lot="result.lotIn"
-        :tpAmt="result.tpAmt"
-        :slAmt="result.slAmt"
-        :tpPoints="result.tpPoints"
-        :slPoints="result.slPoints"
-        :tpPrice="result.tpPrice"
-        :slPrice="result.slPrice"
-        :showAmounts="true"
-        :fmt="fmt"
-      />
-
-      <ResultSection
-        title="場外（對沖）"
-        lotLabel="場外手數"
-        tpLabel="場外止盈"
-        slLabel="場外止損"
-        :lot="result.lotOut"
-        :tpPoints="result.hedgeTpPoints"
-        :slPoints="result.hedgeSlPoints"
-        :tpPrice="result.hedgeTpPrice"
-        :slPrice="result.hedgeSlPrice"
-        :fmt="fmt"
-      />
-
+      <!-- 有填進階設定時，只顯示修改後的版本 -->
       <template v-if="result.modified">
         <ResultSection
-          title="修改後場內（依預期止損點數）"
-          lotLabel="修改後場內手數"
-          tpLabel="修改後場內止盈"
-          slLabel="修改後場內止損"
+          title="場內（依預期止損點數）"
+          lotLabel="場內手數"
+          tpLabel="場內止盈"
+          slLabel="場內止損"
           :lot="result.modified.lot"
+          :tpAmt="result.tpAmt"
+          :slAmt="result.slAmt"
           :tpPoints="result.modified.tpPoints"
           :slPoints="expectedSLPoints"
           :tpPrice="result.modified.tpPrice"
           :slPrice="result.modified.slPrice"
+          :showAmounts="true"
           :fmt="fmt"
         />
 
         <ResultSection
-          title="修改後場外（對沖）"
-          lotLabel="修改後場外手數"
-          tpLabel="修改後場外止盈"
-          slLabel="修改後場外止損"
+          title="場外（對沖）"
+          lotLabel="場外手數"
+          tpLabel="場外止盈"
+          slLabel="場外止損"
           :lot="result.modified.lotOut"
           :tpPoints="result.modified.hedgeTpPoints"
           :slPoints="result.modified.hedgeSlPoints"
           :tpPrice="result.modified.hedgeTpPrice"
           :slPrice="result.modified.hedgeSlPrice"
+          :fmt="fmt"
+        />
+      </template>
+
+      <!-- 沒填進階設定時，顯示原始版本 -->
+      <template v-else>
+        <ResultSection
+          title="場內"
+          lotLabel="場內手數"
+          tpLabel="場內止盈"
+          slLabel="場內止損"
+          :lot="result.lotIn"
+          :tpAmt="result.tpAmt"
+          :slAmt="result.slAmt"
+          :tpPoints="result.tpPoints"
+          :slPoints="result.slPoints"
+          :tpPrice="result.tpPrice"
+          :slPrice="result.slPrice"
+          :showAmounts="true"
+          :fmt="fmt"
+        />
+
+        <ResultSection
+          title="場外（對沖）"
+          lotLabel="場外手數"
+          tpLabel="場外止盈"
+          slLabel="場外止損"
+          :lot="result.lotOut"
+          :tpPoints="result.hedgeTpPoints"
+          :slPoints="result.hedgeSlPoints"
+          :tpPrice="result.hedgeTpPrice"
+          :slPrice="result.hedgeSlPrice"
           :fmt="fmt"
         />
       </template>
