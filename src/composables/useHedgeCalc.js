@@ -71,6 +71,7 @@ export function useHedgeCalc() {
     const dailyMaxLossAmt = posSize * p.dailyMaxLoss
     const maxDrawdownThreshold = posSize * (1 - p.maxDrawdown)
     const singleLossAmt = posSize * singleLossLimit
+    const balSingleLossAmt = Math.min(bal, posSize) * singleLossLimit // B15: uses MIN(balance, posSize)
     const profitTarget = posSize * phase.profitTargetPct
 
     // 4. Adjustments
@@ -107,21 +108,21 @@ export function useHedgeCalc() {
     // 6. SL Amount — direct translation of 運算區 C21 formula
     // All values below are NEGATIVE (representing losses).
     // The formula picks the MAX (closest to 0 = most restrictive).
-    // A  = maxDrawdownThreshold - balance           (NO dailySL adjust)
-    // B  = -dailyMaxLossAmt - dailyPL - dailySLReduceAmt  (WITH dailySL)
-    // C1 = -singleLossAmt                           (raw, for first comparison)
-    // C2 = -singleLossAmt - dailySLReduceAmt        (WITH dailySL)
-    // Result: IF(A > MAX(B, C1), A, MAX(B, C2))
+    // A  = maxDrawdownThreshold - balance                      (NO dailySL adjust)
+    // B  = -dailyMaxLossAmt - dailyPL - dailySLReduceAmt      (WITH dailySL)
+    // C1 = -posSize*singleLossLimit                            (raw, for outer comparison)
+    // C2 = -MIN(bal,posSize)*singleLossLimit - dailySLReduceAmt (balance-adjusted, for else branch)
+    // Result: IF(A > IF(B>=C1, B, C1), A, IF(B>=C2, B, C2))
     const negA = maxDrawdownThreshold - bal
     const negB = -dailyMaxLossAmt - dpl - dailySLReduceAmt
     const negC1 = -singleLossAmt
-    const negC2 = -singleLossAmt - dailySLReduceAmt
-    const slAmt = (negA > Math.max(negB, negC1))
+    const negC2 = -balSingleLossAmt - dailySLReduceAmt
+    const slAmt = (negA > (negB >= negC1 ? negB : negC1))
       ? negA
-      : Math.max(negB, negC2)
+      : (negB >= negC2 ? negB : negC2)
 
     // Determine binding constraint name (positive values for display)
-    const constraint1 = singleLossAmt
+    const constraint1 = balSingleLossAmt
     const constraint2 = dailyMaxLossAmt + dpl
     const constraint3 = bal - maxDrawdownThreshold
     const bindingConstraint = Math.min(constraint1, constraint2, constraint3)
