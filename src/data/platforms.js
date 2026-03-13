@@ -12,7 +12,7 @@ export const PLATFORMS = {
     realConsistency: 4.5,
     adjustments: { profitTargetExtra: 0.5, dailySLReduce: -0.8, tpReduce: 0.3, slExtra: 0.3 },
     maxSingleProfit: 0,
-    minDailyProfitReq: 0,
+    minDailyProfit: 0,
     positionSizes: [5500, 11000, 27500, 55000, 110000, 220000, 5000, 10000, 25000, 50000, 100000, 200000],
     lotTableIn: {
       '真金階段':      [0.080, 0.160, 0.400, 0.800, 1.600, 3.200, 0.080, 0.160, 0.400, 0.800, 1.600, 3.200],
@@ -36,7 +36,7 @@ export const PLATFORMS = {
     realConsistency: 4.5,
     adjustments: { profitTargetExtra: 0.5, dailySLReduce: -0.8, tpReduce: 0.3, slExtra: 0.3 },
     maxSingleProfit: 0,
-    minDailyProfitReq: 0,
+    minDailyProfit: 0,
     positionSizes: [5500, 11000, 27500, 55000, 110000, 220000, 5000, 10000, 25000, 50000, 100000, 200000],
     lotTableIn: {
       '真金階段':      [0.080, 0.160, 0.400, 0.800, 1.600, 3.200, 0.080, 0.160, 0.400, 0.800, 1.600, 3.200],
@@ -63,7 +63,7 @@ export const PLATFORMS = {
     realConsistency: 4.5,
     adjustments: { profitTargetExtra: 0.5, dailySLReduce: -0.8, tpReduce: 0.3, slExtra: 0.3 },
     maxSingleProfit: 0,
-    minDailyProfitReq: 0,
+    minDailyProfit: 0,
     positionSizes: [25000, 50000, 100000, 200000],
     lotTableIn: {
       '第一階段': [1.550, 3.10, 6.20, 12.400],
@@ -96,7 +96,7 @@ export const PLATFORMS = {
     realConsistency: 1,
     adjustments: { profitTargetExtra: 0.5, dailySLReduce: -0.5, tpReduce: 0.15, slExtra: 0.15 },
     maxSingleProfit: 0,
-    minDailyProfitReq: 0,
+    minDailyProfit: 0,
     positionSizes: [250000],
     lotTableIn: {
       '第一階段': [4.700],
@@ -129,7 +129,7 @@ export const PLATFORMS = {
     realConsistency: 2,
     adjustments: { profitTargetExtra: 0.55, dailySLReduce: -0.45, tpReduce: 0.15, slExtra: 0.15 },
     maxSingleProfit: 0,
-    minDailyProfitReq: 0,
+    minDailyProfit: 0,
     positionSizes: [10000, 50000],
     lotTableIn: {
       '第一階段': [0.78, 2.4],
@@ -162,7 +162,7 @@ export const PLATFORMS = {
     realConsistency: 4,
     adjustments: { profitTargetExtra: 0.55, dailySLReduce: -0.45, tpReduce: 0.15, slExtra: 0.15 },
     maxSingleProfit: 0,
-    minDailyProfitReq: 0,
+    minDailyProfit: 0,
     positionSizes: [10000, 25000],
     lotTableIn: {
       '第一階段': [0.50, 1.40],
@@ -195,7 +195,7 @@ export const PLATFORMS = {
     realConsistency: 1,
     adjustments: { profitTargetExtra: 0.5, dailySLReduce: -0.5, tpReduce: 0.15, slExtra: 0.15 },
     maxSingleProfit: 0,
-    minDailyProfitReq: 0,
+    minDailyProfit: 0,
     positionSizes: [5000, 10000, 50000, 100000, 200000],
     lotTableIn: {
       '第一階段': [0.150, 0.300, 1.500, 3.000, 6.000],
@@ -228,7 +228,7 @@ export const PLATFORMS = {
     realConsistency: 1,
     adjustments: { profitTargetExtra: 0.5, dailySLReduce: -0.5, tpReduce: 0.15, slExtra: 0.15 },
     maxSingleProfit: 0,
-    minDailyProfitReq: 0,
+    minDailyProfit: 0,
     positionSizes: [5000, 10000, 25000, 50000],
     lotTableIn: {
       '第一階段': [0.280, 0.560, 1.400, 2.800],
@@ -261,7 +261,7 @@ export const PLATFORMS = {
     realConsistency: 1,
     adjustments: { profitTargetExtra: 0.5, dailySLReduce: -0.5, tpReduce: 0.15, slExtra: 0.15 },
     maxSingleProfit: 0,
-    minDailyProfitReq: 0,
+    minDailyProfit: 0,
     positionSizes: [6000, 15000, 25000, 50000],
     lotTableIn: {
       '第一階段': [0.110, 0.310, 0.510, 1.020],
@@ -294,7 +294,7 @@ export const PLATFORMS = {
     realConsistency: 1,
     adjustments: { profitTargetExtra: 0.5, dailySLReduce: -0.5, tpReduce: 0.15, slExtra: 0.15 },
     maxSingleProfit: 0,
-    minDailyProfitReq: 0,
+    minDailyProfit: 0,
     positionSizes: [5000, 10000, 25000, 50000],
     lotTableIn: {
       '第一階段': [0.080, 0.160, 0.400, 0.800],
@@ -327,7 +327,7 @@ export const PLATFORMS = {
     realConsistency: 1,
     adjustments: { profitTargetExtra: 0.5, dailySLReduce: -0.5, tpReduce: 0.15, slExtra: 0.15 },
     maxSingleProfit: 0,
-    minDailyProfitReq: 0,
+    minDailyProfit: 0,
     positionSizes: [6000, 15000, 25000, 50000],
     lotTableIn: {
       '第一階段': [0.110, 0.310, 0.510, 1.020],
@@ -360,7 +360,7 @@ export const PLATFORMS = {
     realConsistency: 3,
     adjustments: { profitTargetExtra: 0.5, dailySLReduce: -0.5, tpReduce: 0.15, slExtra: 0.15 },
     maxSingleProfit: 0,
-    minDailyProfitReq: 0,
+    minDailyProfit: 0,
     positionSizes: [5000, 10000, 25000, 50000, 100000, 250000, 400000],
     lotTableIn: {
       '第一階段': [0.16, 0.32, 0.80, 1.60, 3.20, 8.00, 12.80],
@@ -393,7 +393,7 @@ export const PLATFORMS = {
     realConsistency: 1,
     adjustments: { profitTargetExtra: 2, dailySLReduce: -2, tpReduce: 3, slExtra: 3 },
     maxSingleProfit: 10000,
-    minDailyProfitReq: 0,
+    minDailyProfit: 0,
     positionSizes: [25000, 50000],
     lotTableIn: {
       '第一階段': [0.23, 0.46],
@@ -426,7 +426,7 @@ export const PLATFORMS = {
     realConsistency: 1,
     adjustments: { profitTargetExtra: 2, dailySLReduce: -2, tpReduce: 3, slExtra: 3 },
     maxSingleProfit: 10000,
-    minDailyProfitReq: 0,
+    minDailyProfit: 0,
     positionSizes: [25000, 50000],
     lotTableIn: {
       '第一階段': [0.23, 0.46],
@@ -459,7 +459,7 @@ export const PLATFORMS = {
     realConsistency: 4,
     adjustments: { profitTargetExtra: 0.5, dailySLReduce: -0.8, tpReduce: 0.3, slExtra: 0.3 },
     maxSingleProfit: 10000,
-    minDailyProfitReq: 0,
+    minDailyProfit: 0,
     positionSizes: [25000, 50000],
     lotTableIn: {
       '第一階段': [0.23, 0.46],
