@@ -68,10 +68,11 @@ export function useHedgeCalc() {
     // 3. Key parameters
     const singleLossLimit = isReal ? p.realLossLimit : p.examLossLimit
     const consistency = isReal ? p.realConsistency : p.examConsistency
-    const dailyMaxLossAmt = posSize * p.dailyMaxLoss
-    const maxDrawdownThreshold = posSize * (1 - p.maxDrawdown)
-    const singleLossAmt = posSize * singleLossLimit
-    const balSingleLossAmt = Math.min(bal, posSize) * singleLossLimit // B15: uses MIN(balance, posSize)
+    const minBalPos = Math.min(bal, posSize)
+    const dailyMaxLossAmt = minBalPos * p.dailyMaxLoss        // F6: MIN(bal, posSize) * dailyMaxLoss
+    const maxDrawdownThreshold = posSize * (1 - p.maxDrawdown) // F7: posSize * (1 - maxDrawdown)
+    const singleLossAmt = posSize * singleLossLimit            // inline in C21 outer comparison
+    const balSingleLossAmt = minBalPos * singleLossLimit       // B15: MIN(bal, posSize) * singleLossLimit
     const profitTarget = posSize * phase.profitTargetPct
 
     // 4. Adjustments
@@ -144,9 +145,9 @@ export function useHedgeCalc() {
       slPrice = entry - slPoints
     }
 
-    // 9. Hedge (場外)
-    const hedgeTpPoints = Math.abs(slPoints) - adj.slExtra
-    const hedgeSlPoints = -(Math.abs(tpPoints) + adj.tpReduce)
+    // 9. Hedge (場外) — F22=-C23-C18, F23=-C22-C19
+    const hedgeTpPoints = Math.abs(slPoints) - adj.tpReduce  // F22: -slPoints - C18(止盈少打)
+    const hedgeSlPoints = -(Math.abs(tpPoints) + adj.slExtra) // F23: -tpPoints - C19(止損多打)
     let hedgeTpPrice, hedgeSlPrice
     if (dir === '多') {
       hedgeTpPrice = entry - hedgeTpPoints
@@ -173,8 +174,8 @@ export function useHedgeCalc() {
       }
       // 修改後場外手數：等比例調整
       const modLotOut = lotIn > 0 ? lotOut * (modLot / lotIn) : lotOut
-      const modHedgeTpPoints = absExpSL - adj.slExtra
-      const modHedgeSlPoints = -(modTpPoints + adj.tpReduce)
+      const modHedgeTpPoints = absExpSL - adj.tpReduce       // H6: -E6 - C18(止盈少打)
+      const modHedgeSlPoints = -(modTpPoints + adj.slExtra)  // G6: -F6 - C19(止損多打)
       let modHedgeTpPrice, modHedgeSlPrice
       if (dir === '多') {
         modHedgeTpPrice = entry - modHedgeTpPoints
