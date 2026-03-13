@@ -33,6 +33,14 @@
           </select>
         </div>
         <div class="field">
+          <label>場內餘額</label>
+          <input type="number" v-model.number="balance" step="1">
+        </div>
+        <div class="field">
+          <label>每日獲利/虧損數值 (預設0)</label>
+          <input type="number" v-model.number="dailyPL" step="0.01">
+        </div>
+        <div class="field">
           <label>場內多空</label>
           <select v-model="direction">
             <option value="多">多 (Long)</option>
@@ -42,14 +50,6 @@
         <div class="field">
           <label>場內進場點位</label>
           <input type="number" v-model.number="entryPrice" step="0.01">
-        </div>
-        <div class="field">
-          <label>場內餘額</label>
-          <input type="number" v-model.number="balance" step="1">
-        </div>
-        <div class="field">
-          <label>每日獲利/虧損數值 (預設0)</label>
-          <input type="number" v-model.number="dailyPL" step="0.01">
         </div>
       </div>
     </div>
