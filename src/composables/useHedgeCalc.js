@@ -194,10 +194,14 @@ export function useHedgeCalc() {
 
     // Warnings
     const warnings = []
+    if (slAmt >= 0)
+      warnings.push('今日已達到每日最大虧損，請隔天再繼續')
+    else if (tpAmt === profitExtraAmt)
+      warnings.push('已達到獲利目標，如有開啟來回打請確認當天起始階段是否在前一天的每日最大虧損附近')
+    else if (tpAmt < 0)
+      warnings.push('每日獲利/虧損數值設定有誤，或已達到今日獲利上限')
     if (bal <= maxDrawdownThreshold)
       warnings.push('餘額已觸及最大總虧損門檻，帳戶可能被強制停損！')
-    if (dpl <= -dailyMaxLossAmt)
-      warnings.push('每日獲利/虧損已達每日最大虧損上限，當日不應再交易！')
 
     // Info note
     const bindingName = (bindingConstraint === constraint1) ? '單次虧損上限' :
