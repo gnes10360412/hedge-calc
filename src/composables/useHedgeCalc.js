@@ -76,22 +76,55 @@ export function useHedgeCalc() {
     // 4. Adjustments
     const adj = p.adjustments
     const dailySLReduceAmt = adj.dailySLReduce * contractValueIn
+    const profitExtraAmt = adj.profitTargetExtra * contractValueIn
 
-    // 5. TP Amount (subtract dailyPL per spreadsheet formula: E21-B7)
-    let tpAmt = (consistency > 0 ? profitTarget / consistency : profitTarget) - dpl
+    // 5. TP Amount — matches 運算區 C20 formula
+    // E20 = remaining to target + extra = posSize + profitTarget - balance + profitExtraAmt
+    // E21 = MIN(E20, profitTarget/consistency)
+    // When consistency=1: normalTP = E20 (no dailyPL subtraction)
+    // When consistency≠1: normalTP = E21 - dailyPL
+    const remainingToTarget = posSize + profitTarget - bal + profitExtraAmt
+    let normalTP
+    if (consistency === 1 || consistency === 0) {
+      // No consistency rule: use remaining to target (E20), no dailyPL subtraction
+      normalTP = remainingToTarget < 0 ? profitTarget : remainingToTarget
+    } else {
+      // Has consistency rule: MIN(remaining, profitTarget/consistency) - dailyPL
+      const perSession = profitTarget / consistency
+      normalTP = Math.min(remainingToTarget, perSession) - dpl
+    }
+    let tpAmt = normalTP
+    // Single profit cap check (E15 > 0)
     if (p.maxSingleProfit > 0) {
-      const profitExtraAmt = adj.profitTargetExtra * contractValueIn
       const singleProfitCap = p.maxSingleProfit - profitExtraAmt - dpl
       if (singleProfitCap > 0 && singleProfitCap < tpAmt) tpAmt = singleProfitCap
     }
+    // minDailyProfit special case (B24)
+    if (p.minDailyProfit > 0 && consistency === 1) {
+      tpAmt = p.minDailyProfit * posSize + profitExtraAmt
+    }
 
-    // 6. SL Amount (3 constraints)
+    // 6. SL Amount — direct translation of 運算區 C21 formula
+    // All values below are NEGATIVE (representing losses).
+    // The formula picks the MAX (closest to 0 = most restrictive).
+    // A  = maxDrawdownThreshold - balance           (NO dailySL adjust)
+    // B  = -dailyMaxLossAmt - dailyPL - dailySLReduceAmt  (WITH dailySL)
+    // C1 = -singleLossAmt                           (raw, for first comparison)
+    // C2 = -singleLossAmt - dailySLReduceAmt        (WITH dailySL)
+    // Result: IF(A > MAX(B, C1), A, MAX(B, C2))
+    const negA = maxDrawdownThreshold - bal
+    const negB = -dailyMaxLossAmt - dpl - dailySLReduceAmt
+    const negC1 = -singleLossAmt
+    const negC2 = -singleLossAmt - dailySLReduceAmt
+    const slAmt = (negA > Math.max(negB, negC1))
+      ? negA
+      : Math.max(negB, negC2)
+
+    // Determine binding constraint name (positive values for display)
     const constraint1 = singleLossAmt
-    const constraint2 = dailyMaxLossAmt - dpl
+    const constraint2 = dailyMaxLossAmt + dpl
     const constraint3 = bal - maxDrawdownThreshold
-    let bindingConstraint = Math.min(constraint1, constraint2, constraint3)
-    if (bindingConstraint < 0) bindingConstraint = 0
-    const slAmt = -(bindingConstraint + dailySLReduceAmt)
+    const bindingConstraint = Math.min(constraint1, constraint2, constraint3)
 
     // 7. Convert to points
     let tpPoints = 0, slPoints = 0
