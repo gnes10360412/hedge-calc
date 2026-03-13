@@ -65,6 +65,13 @@
       </div>
     </div>
 
+    <!-- 警告通知 -->
+    <div v-if="result && result.warnings.length" class="warnings">
+      <div v-for="(w, i) in result.warnings" :key="i" class="warning-box">
+        {{ w }}
+      </div>
+    </div>
+
     <!-- 計算結果 -->
     <div class="card" v-if="result">
       <h2>計算結果</h2>

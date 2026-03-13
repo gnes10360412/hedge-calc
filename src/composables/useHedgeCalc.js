@@ -192,6 +192,13 @@ export function useHedgeCalc() {
       }
     }
 
+    // Warnings
+    const warnings = []
+    if (bal <= maxDrawdownThreshold)
+      warnings.push('餘額已觸及最大總虧損門檻，帳戶可能被強制停損！')
+    if (dpl <= -dailyMaxLossAmt)
+      warnings.push('每日獲利/虧損已達每日最大虧損上限，當日不應再交易！')
+
     // Info note
     const bindingName = (bindingConstraint === constraint1) ? '單次虧損上限' :
       (bindingConstraint === constraint2) ? '每日最大虧損' : '最大虧損限制'
@@ -201,6 +208,7 @@ export function useHedgeCalc() {
       tpPrice, slPrice,
       hedgeTpPoints, hedgeSlPoints, hedgeTpPrice, hedgeSlPrice,
       modified,
+      warnings,
       info: {
         multiplier, contractValueIn, contractValueOut,
         singleLossLimit, singleLossAmt,
