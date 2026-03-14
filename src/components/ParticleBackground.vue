@@ -22,7 +22,7 @@ onMounted(() => {
 
   // Create particles
   const particles = []
-  const count = 18
+  const count = 40
 
   for (let i = 0; i < count; i++) {
     const isCyan = Math.random() > 0.3
