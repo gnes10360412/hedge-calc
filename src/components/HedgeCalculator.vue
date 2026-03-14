@@ -142,16 +142,49 @@
 
       <!-- Info note -->
       <div class="note">
-        <b>參數資訊：</b><br>
-        標的乘數: {{ result.info.multiplier }}
-        | 標的數值(場內): {{ fmt(result.info.contractValueIn, 2) }}
-        | 標的數值(場外): {{ fmt(result.info.contractValueOut, 2) }}<br>
-        單次虧損上限: {{ (result.info.singleLossLimit * 100).toFixed(2) }}% = {{ fmt(result.info.singleLossAmt, 2) }}<br>
-        每日最大虧損: {{ (result.info.dailyMaxLoss * 100) }}% = {{ fmt(result.info.dailyMaxLossAmt, 2) }}<br>
-        最大虧損門檻: {{ (result.info.maxDrawdown * 100) }}% → 最低餘額 {{ fmt(result.info.maxDrawdownThreshold, 2) }}<br>
-        獲利目標: {{ result.info.profitTarget }} | 獲利一致性次數: {{ result.info.consistency }}<br>
-        浮動倍率: {{ fmt(result.info.floatRatio, 4) }}<br>
-        止損約束: {{ result.info.bindingName }} ({{ fmt(result.info.bindingConstraint, 2) }})
+        <b>參數資訊</b>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">標的乘數</div>
+            <div class="info-value">{{ result.info.multiplier }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">標的數值 (場內)</div>
+            <div class="info-value">{{ fmt(result.info.contractValueIn, 2) }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">標的數值 (場外)</div>
+            <div class="info-value">{{ fmt(result.info.contractValueOut, 2) }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">單次虧損上限</div>
+            <div class="info-value">{{ (result.info.singleLossLimit * 100).toFixed(2) }}% = {{ fmt(result.info.singleLossAmt, 2) }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">每日最大虧損</div>
+            <div class="info-value">{{ (result.info.dailyMaxLoss * 100) }}% = {{ fmt(result.info.dailyMaxLossAmt, 2) }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">最大虧損門檻</div>
+            <div class="info-value">{{ (result.info.maxDrawdown * 100) }}% → {{ fmt(result.info.maxDrawdownThreshold, 2) }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">獲利目標</div>
+            <div class="info-value">{{ result.info.profitTarget }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">獲利一致性次數</div>
+            <div class="info-value">{{ result.info.consistency }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">浮動倍率</div>
+            <div class="info-value">{{ fmt(result.info.floatRatio, 4) }}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">止損約束</div>
+            <div class="info-value">{{ result.info.bindingName }} ({{ fmt(result.info.bindingConstraint, 2) }})</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
