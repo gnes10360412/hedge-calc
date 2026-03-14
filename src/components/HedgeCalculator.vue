@@ -4,7 +4,7 @@
 
     <!-- 基本設定 -->
     <div class="card">
-      <h2>基本設定</h2>
+      <h2><i class="fa-solid fa-gear"></i> 基本設定</h2>
       <div class="grid">
         <div class="field">
           <label>平台</label>
@@ -56,7 +56,7 @@
 
     <!-- 進階設定 -->
     <div class="card">
-      <h2>進階設定（選填）</h2>
+      <h2><i class="fa-solid fa-sliders"></i> 進階設定（選填）</h2>
       <div class="grid">
         <div class="field">
           <label>預期止損點數（可改，要加負號）</label>
@@ -74,7 +74,7 @@
 
     <!-- 計算結果 -->
     <div class="card" v-if="result">
-      <h2>計算結果</h2>
+      <h2><i class="fa-solid fa-chart-line"></i> 計算結果</h2>
 
       <!-- 有填進階設定時，只顯示修改後的版本 -->
       <template v-if="result.modified">
@@ -142,7 +142,7 @@
 
       <!-- Info note -->
       <div class="note">
-        <b>參數資訊</b>
+        <b><i class="fa-solid fa-circle-info"></i> 參數資訊</b>
         <div class="info-grid">
           <div class="info-item">
             <div class="info-label">標的乘數</div>
