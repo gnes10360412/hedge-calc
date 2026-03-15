@@ -1,16 +1,16 @@
 :root {
   --bg: #000000;
-  --card: rgba(255, 255, 255, 0.05);
-  --card-hover: rgba(255, 255, 255, 0.08);
-  --border: rgba(255, 255, 255, 0.07);
-  --border-hover: rgba(255, 255, 255, 0.15);
+  --card: rgba(255, 255, 255, 0.04);
+  --card-hover: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.14);
   --text: #f0f0f0;
   --muted: #6b7280;
   --accent: #06b6d4;
   --green: #34d399;
   --red: #fb7185;
   --yellow: #fbbf24;
-  --input-bg: rgba(255, 255, 255, 0.04);
+  --input-bg: rgba(255, 255, 255, 0.03);
   --glass-blur: blur(24px);
   --shadow-md: 0 4px 24px rgba(0,0,0,0.5);
 }
@@ -27,6 +27,22 @@ body {
   overflow-x: hidden;
 }
 
+/* ─── Scanline Overlay ─── */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255,255,255,0.008) 2px,
+    rgba(255,255,255,0.008) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
 /* ─── Particle Canvas ─── */
 .particle-canvas {
   position: fixed;
@@ -39,19 +55,73 @@ body {
 }
 
 /* Custom scrollbar */
-::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+::-webkit-scrollbar-thumb { background: rgba(6,182,212,0.15); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(6,182,212,0.3); }
 
+/* ─── H1 Title with Glitch ─── */
 h1 {
   text-align: center;
-  font-size: 1.6rem;
-  font-weight: 700;
-  margin-bottom: 32px;
-  color: var(--accent);
-  letter-spacing: 6px;
+  font-size: 1.7rem;
+  font-weight: 800;
+  margin-bottom: 36px;
+  letter-spacing: 8px;
   text-transform: uppercase;
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    var(--accent) 0%, #67e8f9 20%,
+    var(--accent) 40%, #67e8f9 60%,
+    var(--accent) 80%, #67e8f9 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+  text-shadow: none;
+}
+
+h1::before, h1::after {
+  content: '對 沖 計 算 器';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  background: inherit;
+  background-size: inherit;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: inherit;
+}
+
+h1::before {
+  animation: glitch1 4s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+}
+
+h1::after {
+  animation: glitch2 4s infinite;
+  clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes glitch1 {
+  0%, 92%, 100% { transform: translate(0); }
+  93% { transform: translate(3px, -1px); }
+  95% { transform: translate(-2px, 1px); }
+  97% { transform: translate(1px, 0); }
+}
+
+@keyframes glitch2 {
+  0%, 90%, 100% { transform: translate(0); }
+  91% { transform: translate(-3px, 1px); }
+  93% { transform: translate(2px, -1px); }
+  96% { transform: translate(-1px, 0); }
 }
 
 .container {
@@ -61,18 +131,30 @@ h1 {
   z-index: 1;
 }
 
-/* ─── Glass Card ─── */
+/* ─── Glass Card with HUD Brackets & Top Accent ─── */
 .card {
   background: var(--card);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 28px;
   margin-bottom: 24px;
   box-shadow: var(--shadow-md);
   transition: border-color 0.3s, background 0.3s;
   animation: fadeInUp 0.5s ease-out both;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Top accent bar */
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.5;
 }
 
 .card:hover {
@@ -80,298 +162,17 @@ h1 {
   background: var(--card-hover);
 }
 
-.card h2 {
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: var(--accent);
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-/* ─── Input Grid ─── */
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-}
-
-@media (max-width: 600px) {
-  .grid { grid-template-columns: 1fr; }
-}
-
-.field { display: flex; flex-direction: column; gap: 8px; }
-
-.field label {
-  font-size: 0.68rem;
-  color: var(--muted);
-  font-weight: 500;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
-
-.field input, .field select {
-  background: var(--input-bg);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px 16px;
-  color: var(--text);
-  font-family: 'Inter', 'Noto Sans TC', sans-serif;
-  font-size: 0.95rem;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-}
-
-.field input:focus, .field select:focus {
-  border-color: var(--accent);
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 0 0 3px rgba(6,182,212,0.08);
-}
-
-.field input::placeholder {
-  color: rgba(107,114,128,0.5);
-}
-
-/* ─── Result Section ─── */
-.result-section {
-  margin-bottom: 24px;
-}
-
-.result-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-
-@media (max-width: 600px) {
-  .result-grid { grid-template-columns: 1fr; }
-}
-
-.result-box {
-  background: var(--input-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 18px;
-  transition: transform 0.2s, border-color 0.2s, background 0.2s;
-}
-
-.result-box:hover {
-  transform: translateY(-2px);
-  border-color: var(--border-hover);
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.result-box h3 {
-  font-size: 0.68rem;
-  color: var(--muted);
-  margin-bottom: 10px;
-  font-weight: 500;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
-
-.result-box .value {
-  font-family: 'Inter', monospace;
-  font-size: 1.6rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.5px;
-}
-
-.result-box .sub {
-  font-family: 'Inter', monospace;
-  font-size: 0.78rem;
-  color: var(--muted);
-  margin-top: 8px;
-  font-variant-numeric: tabular-nums;
-}
-
-/* ─── Semantic Colors ─── */
-.tp { color: var(--green); }
-.sl { color: var(--red); }
-.lot { color: var(--yellow); }
-.neutral { color: var(--accent); }
-
-/* ─── Icons ─── */
-.icon-tp {
-  color: var(--green);
-  font-size: 0.7em;
-  margin-right: 3px;
-}
-
-.icon-sl {
-  color: var(--red);
-  font-size: 0.7em;
-  margin-right: 3px;
-}
-
-/* ─── Lot Box Emphasis ─── */
-.lot-box {
-  background: rgba(251,191,36,0.03);
-  border-color: rgba(251,191,36,0.10);
-}
-
-.lot-box:hover {
-  border-color: rgba(251,191,36,0.22);
-  background: rgba(251,191,36,0.06);
-}
-
-.result-section-title {
-  font-size: 0.72rem;
-  color: var(--muted);
-  margin: 24px 0 12px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-/* ─── Info Note (Grid Cards) ─── */
-.note {
-  margin-top: 20px;
-  padding: 0;
-  background: none;
-  border: none;
-  line-height: 1.5;
-}
-
-.note b {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.72rem;
-  color: var(--accent);
-  margin-bottom: 12px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-.info-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-@media (max-width: 600px) {
-  .info-grid { grid-template-columns: 1fr; }
-}
-
-.info-item {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  padding: 12px 16px;
-  transition: border-color 0.2s, background 0.2s;
-}
-
-.info-item:hover {
-  border-color: rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.info-label {
-  font-size: 0.62rem;
-  color: var(--muted);
-  font-weight: 500;
-  margin-bottom: 4px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.info-value {
-  font-family: 'Inter', monospace;
-  font-size: 0.88rem;
-  color: var(--text);
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-/* ─── Warnings ─── */
-.warnings { margin-bottom: 24px; }
-.warning-box {
-  background: rgba(251,113,133,0.06);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid rgba(251,113,133,0.2);
-  border-radius: 12px;
-  padding: 16px 20px;
-  color: var(--red);
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-bottom: 10px;
-  animation: pulse 2.5s ease-in-out infinite;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.warning-box::before {
-  content: '\26A0';
-  font-size: 1.2rem;
-  flex-shrink: 0;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-}
-
-/* ─── Fade-in Animation ─── */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.card:nth-child(1) { animation-delay: 0s; }
-.card:nth-child(2) { animation-delay: 0.1s; }
-.card:nth-child(3) { animation-delay: 0.2s; }
-.warnings { animation: fadeInUp 0.5s ease-out both; }
-
-/* ─── Staggered Result Box Entrance ─── */
-.anim-box {
-  animation: fadeInUp 0.5s ease-out both;
-  animation-delay: calc(var(--i, 0) * 0.08s);
-}
-
-/* ─── Animated Number Flash ─── */
-.animated-num {
-  display: inline-block;
-  transition: text-shadow 0.3s;
-}
-
-.animated-num.flash {
-  text-shadow: 0 0 12px currentColor, 0 0 24px currentColor;
-}
-
-/* ─── Glowing Border on Card Hover ─── */
-.card {
-  position: relative;
-  overflow: hidden;
-}
-
+/* Rotating glow border */
 .card::before {
   content: '';
   position: absolute;
-  top: -1px;
-  left: -1px;
-  right: -1px;
-  bottom: -1px;
+  top: -1px; left: -1px; right: -1px; bottom: -1px;
   border-radius: inherit;
   padding: 1px;
   background: conic-gradient(
     from var(--border-angle, 0deg),
     transparent 40%,
-    rgba(6,182,212,0.3) 50%,
+    rgba(6,182,212,0.25) 50%,
     transparent 60%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -397,54 +198,362 @@ h1 {
   to { --border-angle: 360deg; }
 }
 
-/* ─── Input Focus Glow Sweep ─── */
+.card h2 {
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-bottom: 22px;
+  color: var(--accent);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.card h2 i {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+/* ─── HUD Corner Brackets ─── */
+.hud-corners {
+  position: relative;
+}
+
+.hud-corners::before,
+.hud-corners::after,
+.hud-corners > .corner-bl,
+.hud-corners > .corner-br {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--accent);
+  border-style: solid;
+  border-width: 0;
+  opacity: 0.35;
+  transition: opacity 0.3s;
+}
+
+.hud-corners:hover::before,
+.hud-corners:hover::after,
+.hud-corners:hover > .corner-bl,
+.hud-corners:hover > .corner-br { opacity: 0.7; }
+
+.hud-corners::before { top: 8px; left: 8px; border-top-width: 1px; border-left-width: 1px; }
+.hud-corners::after { top: 8px; right: 8px; border-top-width: 1px; border-right-width: 1px; }
+.hud-corners > .corner-bl { bottom: 8px; left: 8px; border-bottom-width: 1px; border-left-width: 1px; }
+.hud-corners > .corner-br { bottom: 8px; right: 8px; border-bottom-width: 1px; border-right-width: 1px; }
+
+/* ─── Input Grid ─── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+@media (max-width: 600px) {
+  .grid { grid-template-columns: 1fr; }
+}
+
+.field { display: flex; flex-direction: column; gap: 8px; }
+
+.field label {
+  font-size: 0.65rem;
+  color: var(--muted);
+  font-weight: 500;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
 .field input, .field select {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-family: 'Inter', 'Noto Sans TC', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
   position: relative;
 }
 
 .field input:focus, .field select:focus {
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.06);
   animation: glowPulse 1.5s ease-in-out infinite;
+}
+
+.field input::placeholder {
+  color: rgba(107,114,128,0.5);
 }
 
 @keyframes glowPulse {
   0%, 100% { box-shadow: 0 0 0 3px rgba(6,182,212,0.06); }
-  50% { box-shadow: 0 0 0 3px rgba(6,182,212,0.15), 0 0 16px rgba(6,182,212,0.06); }
+  50% { box-shadow: 0 0 0 3px rgba(6,182,212,0.15), 0 0 20px rgba(6,182,212,0.05); }
 }
 
-/* ─── Result Box Hover Glow ─── */
+/* ─── Result Section ─── */
+.result-section {
+  margin-bottom: 24px;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 600px) {
+  .result-grid { grid-template-columns: 1fr; }
+}
+
 .result-box {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  transition: transform 0.25s, border-color 0.25s, background 0.25s, box-shadow 0.25s;
   position: relative;
   overflow: hidden;
 }
 
+/* Top accent line on result boxes */
+.result-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+}
+
+.result-box:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-hover);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+/* Light sweep on hover */
 .result-box::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
+  top: 0; left: -100%;
+  width: 60%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
-  transition: left 0.5s;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+  transition: left 0.6s ease;
   pointer-events: none;
 }
 
 .result-box:hover::after {
-  left: 100%;
+  left: 150%;
 }
 
-/* ─── Info Item Hover Lift ─── */
+.result-box h3 {
+  font-size: 0.65rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+  font-weight: 500;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.result-box .value {
+  font-family: 'Inter', monospace;
+  font-size: 1.65rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.5px;
+}
+
+.result-box .sub {
+  font-family: 'Inter', monospace;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Semantic Colors with Neon Glow ─── */
+.tp { color: var(--green); text-shadow: 0 0 8px rgba(52,211,153,0.3); }
+.sl { color: var(--red); text-shadow: 0 0 8px rgba(251,113,133,0.3); }
+.lot { color: var(--yellow); text-shadow: 0 0 8px rgba(251,191,36,0.3); }
+.neutral { color: var(--accent); }
+
+/* ─── Icons ─── */
+.icon-tp { color: var(--green); font-size: 0.7em; margin-right: 3px; }
+.icon-sl { color: var(--red); font-size: 0.7em; margin-right: 3px; }
+
+/* ─── Lot Box with Color Border ─── */
+.lot-box {
+  background: rgba(251,191,36,0.02);
+  border-color: rgba(251,191,36,0.10);
+}
+
+.lot-box::before {
+  background: linear-gradient(90deg, transparent, rgba(251,191,36,0.3), transparent) !important;
+}
+
+.lot-box:hover {
+  border-color: rgba(251,191,36,0.25);
+  background: rgba(251,191,36,0.05);
+  box-shadow: 0 8px 32px rgba(251,191,36,0.06);
+}
+
+/* TP box gets green accent on hover */
+.result-box:has(.tp.animated-num) {
+  border-color: rgba(52,211,153,0.08);
+}
+.result-box:has(.tp.animated-num):hover {
+  border-color: rgba(52,211,153,0.2);
+  box-shadow: 0 8px 32px rgba(52,211,153,0.05);
+}
+.result-box:has(.tp.animated-num)::before {
+  background: linear-gradient(90deg, transparent, rgba(52,211,153,0.25), transparent);
+}
+
+/* SL box gets red accent on hover */
+.result-box:has(.sl.animated-num) {
+  border-color: rgba(251,113,133,0.08);
+}
+.result-box:has(.sl.animated-num):hover {
+  border-color: rgba(251,113,133,0.2);
+  box-shadow: 0 8px 32px rgba(251,113,133,0.05);
+}
+.result-box:has(.sl.animated-num)::before {
+  background: linear-gradient(90deg, transparent, rgba(251,113,133,0.25), transparent);
+}
+
+/* ─── Section Title with Decorative Line ─── */
+.result-section-title {
+  font-size: 0.68rem;
+  color: var(--muted);
+  margin: 28px 0 14px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.result-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+
+/* ─── Info Note (Grid Cards) ─── */
+.note {
+  margin-top: 24px;
+  padding: 0;
+  background: none;
+  border: none;
+  line-height: 1.5;
+}
+
+.note b {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  color: var(--accent);
+  margin-bottom: 14px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.note b::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(6,182,212,0.2), transparent);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .info-grid { grid-template-columns: 1fr; }
+}
+
 .info-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  padding: 12px 16px;
   transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  position: relative;
+}
+
+.info-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 20%; right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
 }
 
 .info-item:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
   transform: translateY(-1px);
 }
 
-/* ─── Warning Shake ─── */
+.info-label {
+  font-size: 0.58rem;
+  color: var(--muted);
+  font-weight: 500;
+  margin-bottom: 4px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.info-value {
+  font-family: 'Inter', monospace;
+  font-size: 0.88rem;
+  color: var(--text);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Warnings ─── */
+.warnings { margin-bottom: 24px; }
 .warning-box {
+  background: rgba(251,113,133,0.05);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(251,113,133,0.2);
+  border-radius: 10px;
+  padding: 16px 20px;
+  color: var(--red);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
   animation: pulse 2.5s ease-in-out infinite, shakeIn 0.5s ease-out both;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-shadow: 0 0 10px rgba(251,113,133,0.2);
+}
+
+.warning-box::before {
+  content: '\26A0';
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 
 @keyframes shakeIn {
@@ -455,24 +564,29 @@ h1 {
   100% { transform: translateX(0); opacity: 1; }
 }
 
-/* ─── H1 Gradient Sweep ─── */
-h1 {
-  background: linear-gradient(
-    90deg,
-    var(--accent) 0%,
-    #67e8f9 25%,
-    var(--accent) 50%,
-    #67e8f9 75%,
-    var(--accent) 100%
-  );
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: shimmer 3s linear infinite;
+/* ─── Animations ─── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+.card:nth-child(1) { animation-delay: 0s; }
+.card:nth-child(2) { animation-delay: 0.1s; }
+.card:nth-child(3) { animation-delay: 0.2s; }
+.warnings { animation: fadeInUp 0.5s ease-out both; }
+
+/* ─── Staggered Result Box Entrance ─── */
+.anim-box {
+  animation: fadeInUp 0.5s ease-out both;
+  animation-delay: calc(var(--i, 0) * 0.08s);
+}
+
+/* ─── Animated Number Flash ─── */
+.animated-num {
+  display: inline-block;
+  transition: text-shadow 0.3s;
+}
+
+.animated-num.flash {
+  text-shadow: 0 0 16px currentColor, 0 0 32px currentColor;
 }

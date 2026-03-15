@@ -3,7 +3,8 @@
     <h1>對沖計算器</h1>
 
     <!-- 基本設定 -->
-    <div class="card">
+    <div class="card hud-corners">
+      <span class="corner-bl"></span><span class="corner-br"></span>
       <h2><i class="fa-solid fa-gear"></i> 基本設定</h2>
       <div class="grid">
         <div class="field">
@@ -55,7 +56,8 @@
     </div>
 
     <!-- 進階設定 -->
-    <div class="card">
+    <div class="card hud-corners">
+      <span class="corner-bl"></span><span class="corner-br"></span>
       <h2><i class="fa-solid fa-sliders"></i> 進階設定（選填）</h2>
       <div class="grid">
         <div class="field">
@@ -73,7 +75,8 @@
     </div>
 
     <!-- 計算結果 -->
-    <div class="card" v-if="result">
+    <div class="card hud-corners" v-if="result">
+      <span class="corner-bl"></span><span class="corner-br"></span>
       <h2><i class="fa-solid fa-chart-line"></i> 計算結果</h2>
 
       <!-- 有填進階設定時，只顯示修改後的版本 -->
