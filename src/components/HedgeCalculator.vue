@@ -2,6 +2,15 @@
   <div class="container">
     <h1>對沖計算器</h1>
 
+    <!-- Status Line -->
+    <div class="status-line">
+      <span class="accent-text">HEDGE SYSTEM</span>
+      <span class="sep"></span>
+      <span>v2.0</span>
+      <span class="sep"></span>
+      <span>{{ currentTime }}<span class="blink-cursor"></span></span>
+    </div>
+
     <!-- 基本設定 -->
     <div class="card">
       <h2><i class="fa-solid fa-gear"></i> 基本設定</h2>
@@ -72,10 +81,17 @@
       </div>
     </div>
 
+    <!-- Ticker bar -->
+    <div v-if="result" class="ticker-bar"></div>
+
     <!-- 計算結果 -->
     <div class="card hud-corners" v-if="result">
+      <span class="corner-tl"></span><span class="corner-tr"></span>
       <span class="corner-bl"></span><span class="corner-br"></span>
-      <h2><i class="fa-solid fa-chart-line"></i> 計算結果</h2>
+      <h2>
+        <i class="fa-solid fa-chart-line"></i> 計算結果
+        <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+      </h2>
 
       <!-- 有填進階設定時，只顯示修改後的版本 -->
       <template v-if="result.modified">
@@ -192,6 +208,7 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
 import ResultSection from './ResultSection.vue'
 import { useHedgeCalc } from '../composables/useHedgeCalc.js'
 
@@ -202,4 +219,22 @@ const {
   onPlatformChange, onPositionSizeChange,
   fmt, result,
 } = useHedgeCalc()
+
+// Live clock
+const currentTime = ref('')
+let clockTimer = null
+
+function updateClock() {
+  const now = new Date()
+  currentTime.value = now.toLocaleTimeString('en-US', { hour12: false })
+}
+
+onMounted(() => {
+  updateClock()
+  clockTimer = setInterval(updateClock, 1000)
+})
+
+onUnmounted(() => {
+  if (clockTimer) clearInterval(clockTimer)
+})
 </script>

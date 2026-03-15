@@ -1,5 +1,7 @@
 <template>
   <ParticleBackground />
+  <div class="data-stream left"></div>
+  <div class="data-stream right"></div>
   <HedgeCalculator />
 </template>
 
