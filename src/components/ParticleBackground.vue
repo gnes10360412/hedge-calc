@@ -23,6 +23,7 @@ onMounted(() => {
   // Create particles
   const particles = []
   const count = 40
+  const connectionDist = 160
 
   for (let i = 0; i < count; i++) {
     const isCyan = Math.random() > 0.3
@@ -33,6 +34,7 @@ onMounted(() => {
       vx: (Math.random() - 0.5) * 0.3,
       vy: (Math.random() - 0.5) * 0.3,
       color: isCyan ? 'rgba(6,182,212,' : 'rgba(251,113,133,',
+      isCyan,
       baseAlpha: Math.random() * 0.5 + 0.3,
       pulse: Math.random() * Math.PI * 2,
       pulseSpeed: Math.random() * 0.01 + 0.005,
@@ -41,6 +43,29 @@ onMounted(() => {
 
   const draw = () => {
     ctx.clearRect(0, 0, w, h)
+
+    // Connection lines between nearby particles
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const a = particles[i]
+        const b = particles[j]
+        const dx = a.x - b.x
+        const dy = a.y - b.y
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        if (dist < connectionDist) {
+          const alpha = (1 - dist / connectionDist) * 0.12
+          ctx.beginPath()
+          ctx.strokeStyle = a.isCyan && b.isCyan
+            ? `rgba(6,182,212,${alpha})`
+            : `rgba(255,255,255,${alpha * 0.5})`
+          ctx.lineWidth = 0.5
+          ctx.moveTo(a.x, a.y)
+          ctx.lineTo(b.x, b.y)
+          ctx.stroke()
+        }
+      }
+    }
+
     for (const p of particles) {
       p.x += p.vx
       p.y += p.vy
