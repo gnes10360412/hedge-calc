@@ -3,8 +3,7 @@
     <h1>對沖計算器</h1>
 
     <!-- 基本設定 -->
-    <div class="card hud-corners">
-      <span class="corner-bl"></span><span class="corner-br"></span>
+    <div class="card">
       <h2><i class="fa-solid fa-gear"></i> 基本設定</h2>
       <div class="grid">
         <div class="field">
@@ -56,8 +55,7 @@
     </div>
 
     <!-- 進階設定 -->
-    <div class="card hud-corners">
-      <span class="corner-bl"></span><span class="corner-br"></span>
+    <div class="card">
       <h2><i class="fa-solid fa-sliders"></i> 進階設定（選填）</h2>
       <div class="grid">
         <div class="field">
