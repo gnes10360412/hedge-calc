@@ -25,18 +25,37 @@ onMounted(() => {
   const count = 55
   const connectionDist = 200
 
+  // Multi-color palette: cyan, green, gold, pink, purple, orange
+  const colors = [
+    { rgba: 'rgba(6,182,212,',   group: 'cool' },   // cyan
+    { rgba: 'rgba(52,211,153,',  group: 'cool' },   // green (emerald)
+    { rgba: 'rgba(129,140,248,', group: 'cool' },   // indigo / purple
+    { rgba: 'rgba(251,191,36,',  group: 'warm' },   // gold
+    { rgba: 'rgba(251,113,133,', group: 'warm' },   // pink / red
+    { rgba: 'rgba(249,115,22,',  group: 'warm' },   // orange
+    { rgba: 'rgba(167,139,250,', group: 'cool' },   // violet
+  ]
+
   for (let i = 0; i < count; i++) {
+    // Weighted: 40% cyan, 60% spread across others
     const rand = Math.random()
-    const isCyan = rand > 0.25
-    const isGold = !isCyan && rand > 0.1
+    let colorObj
+    if (rand < 0.35) colorObj = colors[0]       // cyan — most common
+    else if (rand < 0.50) colorObj = colors[1]   // green
+    else if (rand < 0.62) colorObj = colors[2]   // indigo
+    else if (rand < 0.74) colorObj = colors[3]   // gold
+    else if (rand < 0.82) colorObj = colors[4]   // pink
+    else if (rand < 0.90) colorObj = colors[5]   // orange
+    else colorObj = colors[6]                     // violet
+
     particles.push({
       x: Math.random() * w,
       y: Math.random() * h,
       r: Math.random() * 3.5 + 1.5,
       vx: (Math.random() - 0.5) * 0.35,
       vy: (Math.random() - 0.5) * 0.35,
-      color: isCyan ? 'rgba(6,182,212,' : isGold ? 'rgba(251,191,36,' : 'rgba(251,113,133,',
-      isCyan,
+      color: colorObj.rgba,
+      group: colorObj.group,
       baseAlpha: Math.random() * 0.5 + 0.35,
       pulse: Math.random() * Math.PI * 2,
       pulseSpeed: Math.random() * 0.015 + 0.005,
@@ -89,9 +108,10 @@ onMounted(() => {
         if (dist < connectionDist) {
           const alpha = (1 - dist / connectionDist) * 0.16
           ctx.beginPath()
-          ctx.strokeStyle = a.isCyan && b.isCyan
-            ? `rgba(6,182,212,${alpha})`
-            : `rgba(255,255,255,${alpha * 0.4})`
+          // Same-group connections use the first particle's color, cross-group uses white
+          ctx.strokeStyle = a.group === b.group
+            ? a.color + alpha + ')'
+            : `rgba(255,255,255,${alpha * 0.35})`
           ctx.lineWidth = 0.6
           ctx.moveTo(a.x, a.y)
           ctx.lineTo(b.x, b.y)
